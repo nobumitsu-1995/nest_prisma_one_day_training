@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ja" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NestJS & Prisma 1-Day Hands-on Training</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chosen Palette: Warm Neutrals (beige, off-white, slate gray, with a soft muted blue accent) -->
@@ -10,118 +10,177 @@
     <!-- Visualization & Content Choices: The primary content is text and code. Goal: Educate. Presentation: Well-formatted text and code blocks. Interaction: Sidebar navigation to scroll to sections, and copy-to-clipboard buttons for code snippets. This minimizes complexity and keeps the focus on the learning material itself. A simple CSS/HTML diagram is used to illustrate the NestJS request lifecycle instead of an image, adhering to the no-SVG rule. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
-        body {
-            background-color: #FDFBF8;
-            color: #333;
-            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
-        }
-        .prose h2 {
-            border-bottom: 2px solid #EAEAEA;
-            padding-bottom: 0.5rem;
-            margin-top: 2.5rem;
-            margin-bottom: 1.5rem;
-        }
-        .prose h3 {
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-        }
-        .prose pre {
-            background-color: #2D3748;
-            color: #E2E8F0;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            position: relative;
-        }
-        .prose code {
-            font-family: 'Menlo', 'Consolas', monospace;
-        }
-        .prose code:not(pre *) {
-            background-color: #EAEAEA;
-            padding: 0.2em 0.4em;
-            border-radius: 3px;
-            font-size: 0.9em;
-        }
-        .prose blockquote {
-            border-left-color: #A0AEC0;
-        }
-        .sidebar-link.active {
-            background-color: #E2E8F0;
-            color: #2D3748;
-            font-weight: 600;
-        }
-        .copy-btn {
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            background-color: #4A5568;
-            color: #E2E8F0;
-            border: none;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            cursor: pointer;
-            font-size: 0.8rem;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-        .prose pre:hover .copy-btn {
-            opacity: 1;
-        }
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background-color: #CBD5E0;
-            transform: translateX(-50%);
-        }
-        .timeline-item {
-            position: relative;
-        }
+      body {
+        background-color: #fdfbf8;
+        color: #333;
+        font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo,
+          sans-serif;
+      }
+      .prose h2 {
+        border-bottom: 2px solid #eaeaea;
+        padding-bottom: 0.5rem;
+        margin-top: 2.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .prose h3 {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+      }
+      .prose pre {
+        background-color: #2d3748;
+        color: #e2e8f0;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        position: relative;
+      }
+      .prose code {
+        font-family: "Menlo", "Consolas", monospace;
+      }
+      .prose code:not(pre *) {
+        background-color: #eaeaea;
+        padding: 0.2em 0.4em;
+        border-radius: 3px;
+        font-size: 0.9em;
+      }
+      .prose blockquote {
+        border-left-color: #a0aec0;
+      }
+      .sidebar-link.active {
+        background-color: #e2e8f0;
+        color: #2d3748;
+        font-weight: 600;
+      }
+      .copy-btn {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background-color: #4a5568;
+        color: #e2e8f0;
+        border: none;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        font-size: 0.8rem;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      .prose pre:hover .copy-btn {
+        opacity: 1;
+      }
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background-color: #cbd5e0;
+        transform: translateX(-50%);
+      }
+      .timeline-item {
+        position: relative;
+      }
     </style>
-</head>
-<body class="font-sans antialiased">
+  </head>
+  <body class="font-sans antialiased">
     <div class="flex min-h-screen">
-        <!-- Sidebar -->
-        <aside class="w-64 fixed top-0 left-0 h-full bg-white border-r border-gray-200 py-8 px-4 hidden lg:block">
-            <h1 class="text-xl font-bold text-gray-800 mb-8">研修メニュー</h1>
-            <nav id="sidebar-nav">
-                <ul class="space-y-2">
-                    <li><a href="#section-0" class="sidebar-link block py-2 px-3 rounded-md text-gray-600 hover:bg-gray-100">0. イントロダクション (1h)</a></li>
-                    <li><a href="#section-1" class="sidebar-link block py-2 px-3 rounded-md text-gray-600 hover:bg-gray-100">1. NestJSの基本 (1h)</a></li>
-                    <li><a href="#section-2" class="sidebar-link block py-2 px-3 rounded-md text-gray-600 hover:bg-gray-100">2. 基本的なCRUD API (2h)</a></li>
-                    <li><a href="#section-3" class="sidebar-link block py-2 px-3 rounded-md text-gray-600 hover:bg-gray-100">3. Prismaの基本 (1h)</a></li>
-                    <li><a href="#section-4" class="sidebar-link block py-2 px-3 rounded-md text-gray-600 hover:bg-gray-100">4. NestJSとPrismaの連携 (2h)</a></li>
-                    <li><a href="#section-5" class="sidebar-link block py-2 px-3 rounded-md text-gray-600 hover:bg-gray-100">5. 応用: 依存性の逆転 (1h)</a></li>
-                </ul>
-            </nav>
-        </aside>
+      <!-- Sidebar -->
+      <aside
+        class="w-64 fixed top-0 left-0 h-full bg-white border-r border-gray-200 py-8 px-4 hidden lg:block"
+      >
+        <h1 class="text-xl font-bold text-gray-800 mb-8">研修メニュー</h1>
+        <nav id="sidebar-nav">
+          <ul class="space-y-2">
+            <li>
+              <a
+                href="#section-0"
+                class="sidebar-link block py-2 px-3 rounded-md text-gray-600 hover:bg-gray-100"
+                >0. イントロダクション (1h)</a
+              >
+            </li>
+            <li>
+              <a
+                href="#section-1"
+                class="sidebar-link block py-2 px-3 rounded-md text-gray-600 hover:bg-gray-100"
+                >1. NestJSの基本 (1h)</a
+              >
+            </li>
+            <li>
+              <a
+                href="#section-2"
+                class="sidebar-link block py-2 px-3 rounded-md text-gray-600 hover:bg-gray-100"
+                >2. 基本的なCRUD API (2h)</a
+              >
+            </li>
+            <li>
+              <a
+                href="#section-3"
+                class="sidebar-link block py-2 px-3 rounded-md text-gray-600 hover:bg-gray-100"
+                >3. Prismaの基本 (1h)</a
+              >
+            </li>
+            <li>
+              <a
+                href="#section-4"
+                class="sidebar-link block py-2 px-3 rounded-md text-gray-600 hover:bg-gray-100"
+                >4. NestJSとPrismaの連携 (2h)</a
+              >
+            </li>
+            <li>
+              <a
+                href="#section-5"
+                class="sidebar-link block py-2 px-3 rounded-md text-gray-600 hover:bg-gray-100"
+                >5. 応用: 依存性の逆転 (1h)</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </aside>
 
-        <!-- Main Content -->
-        <main class="lg:ml-64 flex-1 p-6 sm:p-8 md:p-12">
-            <div class="prose max-w-none">
-                <header class="mb-12 text-center">
-                    <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 mb-2">NestJS (v11) & Prisma (v6) 1-Day Training</h1>
-                    <p class="text-lg text-gray-600">1日でNestJSとPrismaの基礎を学び、実践的なサーバーサイド開発の第一歩を踏み出しましょう。</p>
-                </header>
-                
-                <section id="section-0">
-                    <h2>0. イントロダクション (1時間)</h2>
-                    <p>このセクションでは、開発を始めるための環境を整えます。NestJSとPrismaがどのような技術なのかを理解し、プロジェクトを開始する準備をします。</p>
-                    
-                    <h3>NestJSとPrismaについて</h3>
-                    <ul>
-                        <li><strong>NestJS:</strong> 効率的でスケーラブルなNode.jsサーバーサイドアプリケーションを構築するためのフレームワークです。TypeScriptをフルサポートしており、オブジェクト指向プログラミング、関数型プログラミング、FRP(Functional Reactive Programming)の要素を組み合わせています。</li>
-                        <li><strong>Prisma:</strong> 次世代のNode.jsおよびTypeScript向けのORM(Object-Relational Mapper)です。データベーススキーマを直感的に定義し、型安全なデータベースクライアントを自動生成することで、開発体験を向上させます。</li>
-                    </ul>
-                    
-                    <h3>環境構築</h3>
-                    <p>開発に必要なツールをインストールします。Node.js (v18以上を推奨)がインストールされていることを確認してください。</p>
-                    <ol>
-                        <li><strong>データベースの準備 (Docker)</strong>
-                            <p>本研修ではPostgreSQLを使用します。Dockerがあれば、以下のコマンドで簡単にデータベース環境を構築できます。プロジェクトルートに <code>docker-compose.yml</code> を作成してください。</p>
-<pre><code># docker-compose.yml
+      <!-- Main Content -->
+      <main class="lg:ml-64 flex-1 p-6 sm:p-8 md:p-12">
+        <div class="prose max-w-none">
+          <header class="mb-12 text-center">
+            <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 mb-2">
+              NestJS (v11) & Prisma (v6) 1-Day Training
+            </h1>
+            <p class="text-lg text-gray-600">
+              1日でNestJSとPrismaの基礎を学び、実践的なサーバーサイド開発の第一歩を踏み出しましょう。
+            </p>
+          </header>
+
+          <section id="section-0">
+            <h2>0. イントロダクション (1時間)</h2>
+            <p>
+              このセクションでは、開発を始めるための環境を整えます。NestJSとPrismaがどのような技術なのかを理解し、プロジェクトを開始する準備をします。
+            </p>
+
+            <h3>NestJSとPrismaについて</h3>
+            <ul>
+              <li>
+                <strong>NestJS:</strong>
+                効率的でスケーラブルなNode.jsサーバーサイドアプリケーションを構築するためのフレームワークです。TypeScriptをフルサポートしており、オブジェクト指向プログラミング、関数型プログラミング、FRP(Functional
+                Reactive Programming)の要素を組み合わせています。
+              </li>
+              <li>
+                <strong>Prisma:</strong> 次世代のNode.jsおよびTypeScript向けのORM(Object-Relational
+                Mapper)です。データベーススキーマを直感的に定義し、型安全なデータベースクライアントを自動生成することで、開発体験を向上させます。
+              </li>
+            </ul>
+
+            <h3>環境構築</h3>
+            <p>
+              開発に必要なツールをインストールします。Node.js
+              (v18以上を推奨)がインストールされていることを確認してください。
+            </p>
+            <ol>
+              <li>
+                <strong>データベースの準備 (Docker)</strong>
+                <p>
+                  本研修ではPostgreSQLを使用します。Dockerがあれば、以下のコマンドで簡単にデータベース環境を構築できます。プロジェクトルートに
+                  <code>docker-compose.yml</code> を作成してください。
+                </p>
+                <pre><code># docker-compose.yml
 version: '3.8'
 services:
   database:
@@ -138,60 +197,88 @@ services:
 
 volumes:
   postgres_data:</code></pre>
-                            <p>ファイル作成後、以下のコマンドでコンテナを起動します。</p>
-<pre><code>docker-compose up -d</code></pre>
-                        </li>
-                    </ol>
-                </section>
-                
-                <section id="section-1">
-                    <h2>1. NestJSの基本 (1時間)</h2>
-                    <p>NestJSアプリケーションの基本的な構成要素である「モジュール」「コントローラ」「サービス（プロバイダ）」について学びます。</p>
-                    
-                    <div class="not-prose my-8 p-6 bg-white rounded-lg border border-gray-200">
-                        <h4 class="text-lg font-semibold text-center mb-4">リクエストの流れ</h4>
-                        <div class="flex items-center justify-around text-center">
-                            <div class="w-1/4 p-2">
-                                <div class="bg-blue-100 text-blue-800 rounded-lg p-3 shadow">リクエスト</div>
-                            </div>
-                            <div class="text-gray-400 font-bold text-2xl">&rarr;</div>
-                            <div class="w-1/4 p-2">
-                                <div class="bg-green-100 text-green-800 rounded-lg p-3 shadow">Controller</div>
-                                <div class="text-sm text-gray-500 mt-1">ルーティング担当</div>
-                            </div>
-                            <div class="text-gray-400 font-bold text-2xl">&rarr;</div>
-                             <div class="w-1/4 p-2">
-                                <div class="bg-purple-100 text-purple-800 rounded-lg p-3 shadow">Service</div>
-                                <div class="text-sm text-gray-500 mt-1">ビジネスロジック担当</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <h3>主要な構成要素</h3>
-                    <ul>
-                        <li><strong>Controller:</strong> HTTPリクエストを受け取り、適切なレスポンスを返す役割を担います。ルーティングの定義はここで行います。(例: <code>@Controller('users')</code>, <code>@Get(':id')</code>)</li>
-                        <li><strong>Provider (Service):</strong> ビジネスロジックをカプセル化する場所です。コントローラから呼び出され、データの処理や外部サービスとの連携などを行います。<code>@Injectable()</code> デコレータを使い、DI(Dependency Injection)システムに管理させることができます。</li>
-                        <li><strong>Module:</strong> アプリケーションの構成要素をグループ化するためのものです。<code>@Module()</code> デコレータを使い、関連するコントローラやサービスをまとめます。</li>
-                    </ul>
-                </section>
+                <p>ファイル作成後、以下のコマンドでコンテナを起動します。</p>
+                <pre><code>docker-compose up -d</code></pre>
+              </li>
+            </ol>
+          </section>
 
-                <section id="section-2">
-                    <h2>2. 基本的なCRUD APIの作成 (2時間)</h2>
-                    <p>NestJSのCLIを使ってプロジェクトを作成し、データベースを使わないシンプルなインメモリのCRUD APIを実装します。これによりNestJSの基本的な開発フローを体験します。</p>
+          <section id="section-1">
+            <h2>1. NestJSの基本 (1時間)</h2>
+            <p>
+              NestJSアプリケーションの基本的な構成要素である「モジュール」「コントローラ」「サービス（プロバイダ）」について学びます。
+            </p>
 
-                    <h3>1. プロジェクトの新規作成</h3>
-<pre><code>npx @nestjs/cli new nestjs-prisma-project</code></pre>
-                    <p>プロンプトが表示されたら、パッケージマネージャを選択してください (例: npm)。</p>
+            <div class="not-prose my-8 p-6 bg-white rounded-lg border border-gray-200">
+              <h4 class="text-lg font-semibold text-center mb-4">リクエストの流れ</h4>
+              <div class="flex items-center justify-around text-center">
+                <div class="w-1/4 p-2">
+                  <div class="bg-blue-100 text-blue-800 rounded-lg p-3 shadow">リクエスト</div>
+                </div>
+                <div class="text-gray-400 font-bold text-2xl">&rarr;</div>
+                <div class="w-1/4 p-2">
+                  <div class="bg-green-100 text-green-800 rounded-lg p-3 shadow">Controller</div>
+                  <div class="text-sm text-gray-500 mt-1">ルーティング担当</div>
+                </div>
+                <div class="text-gray-400 font-bold text-2xl">&rarr;</div>
+                <div class="w-1/4 p-2">
+                  <div class="bg-purple-100 text-purple-800 rounded-lg p-3 shadow">Service</div>
+                  <div class="text-sm text-gray-500 mt-1">ビジネスロジック担当</div>
+                </div>
+              </div>
+            </div>
 
-                    <h3>2. ユーザー管理機能のモジュール作成</h3>
-                    <p>NestJS CLIを使って、`users` という機能に必要なファイルを一括で生成します。</p>
-<pre><code>cd nestjs-prisma-project
+            <h3>主要な構成要素</h3>
+            <ul>
+              <li>
+                <strong>Controller:</strong>
+                HTTPリクエストを受け取り、適切なレスポンスを返す役割を担います。ルーティングの定義はここで行います。(例:
+                <code>@Controller('users')</code>, <code>@Get(':id')</code>)
+              </li>
+              <li>
+                <strong>Provider (Service):</strong>
+                ビジネスロジックをカプセル化する場所です。コントローラから呼び出され、データの処理や外部サービスとの連携などを行います。<code
+                  >@Injectable()</code
+                >
+                デコレータを使い、DI(Dependency Injection)システムに管理させることができます。
+              </li>
+              <li>
+                <strong>Module:</strong>
+                アプリケーションの構成要素をグループ化するためのものです。<code>@Module()</code>
+                デコレータを使い、関連するコントローラやサービスをまとめます。
+              </li>
+            </ul>
+          </section>
+
+          <section id="section-2">
+            <h2>2. 基本的なCRUD APIの作成 (2時間)</h2>
+            <p>
+              NestJSのCLIを使ってプロジェクトを作成し、データベースを使わないシンプルなインメモリのCRUD
+              APIを実装します。これによりNestJSの基本的な開発フローを体験します。
+            </p>
+
+            <h3>1. プロジェクトの新規作成</h3>
+            <pre><code>npx @nestjs/cli new nestjs-prisma-project</code></pre>
+            <p>プロンプトが表示されたら、パッケージマネージャを選択してください (例: npm)。</p>
+
+            <h3>2. ユーザー管理機能のモジュール作成</h3>
+            <p>NestJS CLIを使って、`users` という機能に必要なファイルを一括で生成します。</p>
+            <pre><code>cd nestjs-prisma-project
 npx @nestjs/cli g resource users</code></pre>
-                    <p>プロンプトで `REST API` を選択し、`Would you like to generate CRUD entry points?` に `y` (Yes)と答えてください。これにより、`users`モジュール、コントローラ、サービス、DTOの雛形が作成されます。今回はDTOを使用しないため、生成された`dto`フォルダと関連するコードは後ほど手動で削除します。</p>
+            <p>
+              プロンプトで `REST API` を選択し、`Would you like to generate CRUD entry points?` に
+              `y`
+              (Yes)と答えてください。これにより、`users`モジュール、コントローラ、サービス、DTOの雛形が作成されます。今回はDTOを使用しないため、生成された`dto`フォルダと関連するコードは後ほど手動で削除します。
+            </p>
 
-                    <h3>3. インメモリでのCRUD実装</h3>
-                    <p>まず、データベースの代わりに、サーバーのメモリ上でデータを管理します。<code>src/users/users.service.ts</code> を以下のように編集します。</p>
-<pre><code>// src/users/users.service.ts
+            <h3>3. インメモリでのCRUD実装</h3>
+            <p>
+              まず、データベースの代わりに、サーバーのメモリ上でデータを管理します。<code
+                >src/users/users.service.ts</code
+              >
+              を以下のように編集します。
+            </p>
+            <pre><code>// src/users/users.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 // ユーザーの型を定義
@@ -246,9 +333,13 @@ export class UsersService {
   }
 }</code></pre>
 
-                    <h3>4. コントローラの修正</h3>
-                    <p>DTOを使用しない方針のため、<code>src/users/users.controller.ts</code> を修正します。DTO関連の型指定を削除し、<code>@Body()</code> で直接データを受け取ります。</p>
-<pre><code>// src/users/users.controller.ts
+            <h3>4. コントローラの修正</h3>
+            <p>
+              DTOを使用しない方針のため、<code>src/users/users.controller.ts</code>
+              を修正します。DTO関連の型指定を削除し、<code>@Body()</code>
+              で直接データを受け取ります。
+            </p>
+            <pre><code>// src/users/users.controller.ts
 import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 
@@ -281,32 +372,46 @@ export class UsersController {
     return this.usersService.remove(id);
   }
 }</code></pre>
-                    <p>この時点で、<code>src/users/dto</code> フォルダは削除して構いません。</p>
+            <p>この時点で、<code>src/users/dto</code> フォルダは削除して構いません。</p>
 
-                    <h3>5. 動作確認</h3>
-                    <p>サーバーを起動して、APIが正しく動作するか確認しましょう。ターミナルで以下のコマンドを実行します。</p>
-<pre><code>npm run start:dev</code></pre>
-                    <p>Postmanやcurlなどのツールを使って、<code>http://localhost:3000/users</code> の各エンドポイントにリクエストを送信してみてください。</p>
-                </section>
-                
-                <section id="section-3">
-                    <h2>3. Prismaの基本 (1時間)</h2>
-                    <p>Prismaをプロジェクトに導入し、データベースのスキーマ定義とマイグレーションを実行する方法を学びます。</p>
+            <h3>5. 動作確認</h3>
+            <p>
+              サーバーを起動して、APIが正しく動作するか確認しましょう。ターミナルで以下のコマンドを実行します。
+            </p>
+            <pre><code>npm run start:dev</code></pre>
+            <p>
+              Postmanやcurlなどのツールを使って、<code>http://localhost:3000/users</code>
+              の各エンドポイントにリクエストを送信してみてください。
+            </p>
+          </section>
 
-                    <h3>1. Prismaの初期化</h3>
-                    <p>プロジェクトルートで以下のコマンドを実行します。</p>
-<pre><code>npx prisma init --datasource-provider postgresql</code></pre>
-                    <p>これにより、<code>prisma</code> フォルダと <code>.env</code> ファイルが生成されます。<code>.env</code> ファイルを編集し、Dockerで設定したデータベースへの接続情報を記述します。</p>
-<pre><code># .env
+          <section id="section-3">
+            <h2>3. Prismaの基本 (1時間)</h2>
+            <p>
+              Prismaをプロジェクトに導入し、データベースのスキーマ定義とマイグレーションを実行する方法を学びます。
+            </p>
+
+            <h3>1. Prismaの初期化</h3>
+            <p>プロジェクトルートで以下のコマンドを実行します。</p>
+            <pre><code>npx prisma init --datasource-provider postgresql</code></pre>
+            <p>
+              これにより、<code>prisma</code> フォルダと
+              <code>.env</code> ファイルが生成されます。<code>.env</code>
+              ファイルを編集し、Dockerで設定したデータベースへの接続情報を記述します。
+            </p>
+            <pre><code># .env
 DATABASE_URL="postgresql://user:password@localhost:5432/nestjs-prisma-training?schema=public"</code></pre>
-                    <blockquote class="border-l-4 border-yellow-400 bg-yellow-50 p-4 my-4">
-                        <p class="font-bold text-yellow-800">注意</p>
-                        <p class="text-yellow-700"><code>P1000: Authentication failed</code> というエラーが出た場合、多くはここのユーザー名・パスワードが<code>docker-compose.yml</code>の内容と一致していないことが原因です。タイプミスがないか確認してください。</p>
-                    </blockquote>
+            <blockquote class="border-l-4 border-yellow-400 bg-yellow-50 p-4 my-4">
+              <p class="font-bold text-yellow-800">注意</p>
+              <p class="text-yellow-700">
+                <code>P1000: Authentication failed</code>
+                というエラーが出た場合、多くはここのユーザー名・パスワードが<code>docker-compose.yml</code>の内容と一致していないことが原因です。タイプミスがないか確認してください。
+              </p>
+            </blockquote>
 
-                    <h3>2. スキーマ定義</h3>
-                    <p><code>prisma/schema.prisma</code> を開き、Userモデルを定義します。</p>
-<pre><code>// prisma/schema.prisma
+            <h3>2. スキーマ定義</h3>
+            <p><code>prisma/schema.prisma</code> を開き、Userモデルを定義します。</p>
+            <pre><code>// prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
@@ -325,28 +430,40 @@ model User {
 }
 </code></pre>
 
-                    <h3>3. マイグレーションの実行</h3>
-                    <p>スキーマ定義を元に、データベースにテーブルを作成します。以下のコマンドを実行してください。</p>
-<pre><code>npx prisma migrate dev --name init-user-model</code></pre>
-                    <p>このコマンドは、マイグレーションファイルを作成し、それをデータベースに適用し、さらに型安全なデータベース操作を提供するPrisma Clientを生成します。</p>
+            <h3>3. マイグレーションの実行</h3>
+            <p>
+              スキーマ定義を元に、データベースにテーブルを作成します。以下のコマンドを実行してください。
+            </p>
+            <pre><code>npx prisma migrate dev --name init-user-model</code></pre>
+            <p>
+              このコマンドは、マイグレーションファイルを作成し、それをデータベースに適用し、さらに型安全なデータベース操作を提供するPrisma
+              Clientを生成します。
+            </p>
 
-                    <h3>4. Prisma Studioでデータ確認</h3>
-                    <p>Prisma Studioは、GUIでデータベースを閲覧・編集できる便利なツールです。</p>
-<pre><code>npx prisma studio</code></pre>
-                    <p>ブラウザでツールが起動し、作成された <code>User</code> テーブルを確認できます。</p>
-                </section>
-                
-                <section id="section-4">
-                    <h2>4. NestJSとPrismaの連携 (2時間)</h2>
-                    <p>インメモリのデータ管理をPrismaに置き換え、データベースと連携した永続的なデータ操作を実現します。</p>
-                    
-                    <h3>1. Prisma Clientのインストール</h3>
-                    <p>まず、Prisma Clientをプロジェクトの依存関係に追加します。</p>
-<pre><code>npm install @prisma/client</code></pre>
-                    
-                    <h3>2. PrismaServiceの作成</h3>
-                    <p>Prisma ClientをNestJSのDIコンテナで管理するためのサービスを作成します。<code>src/prisma</code> ディレクトリを作成し、その中に<code>prisma.service.ts</code>を作成します。</p>
-<pre><code>// src/prisma/prisma.service.ts
+            <h3>4. Prisma Studioでデータ確認</h3>
+            <p>Prisma Studioは、GUIでデータベースを閲覧・編集できる便利なツールです。</p>
+            <pre><code>npx prisma studio</code></pre>
+            <p>ブラウザでツールが起動し、作成された <code>User</code> テーブルを確認できます。</p>
+          </section>
+
+          <section id="section-4">
+            <h2>4. NestJSとPrismaの連携 (2時間)</h2>
+            <p>
+              インメモリのデータ管理をPrismaに置き換え、データベースと連携した永続的なデータ操作を実現します。
+            </p>
+
+            <h3>1. Prisma Clientのインストール</h3>
+            <p>まず、Prisma Clientをプロジェクトの依存関係に追加します。</p>
+            <pre><code>npm install @prisma/client</code></pre>
+
+            <h3>2. PrismaServiceの作成</h3>
+            <p>
+              Prisma ClientをNestJSのDIコンテナで管理するためのサービスを作成します。<code
+                >src/prisma</code
+              >
+              ディレクトリを作成し、その中に<code>prisma.service.ts</code>を作成します。
+            </p>
+            <pre><code>// src/prisma/prisma.service.ts
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
@@ -357,9 +474,14 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   }
 }</code></pre>
 
-                    <h3>3. PrismaModuleの作成</h3>
-                    <p>作成した <code>PrismaService</code> を他のモジュールで使えるように、<code>PrismaModule</code> を作成します。</p>
-<pre><code>// src/prisma/prisma.module.ts
+            <h3>3. PrismaModuleの作成</h3>
+            <p>
+              作成した <code>PrismaService</code> を他のモジュールで使えるように、<code
+                >PrismaModule</code
+              >
+              を作成します。
+            </p>
+            <pre><code>// src/prisma/prisma.module.ts
 import { Module, Global } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 
@@ -370,8 +492,11 @@ import { PrismaService } from './prisma.service';
 })
 export class PrismaModule {}
 </code></pre>
-                    <p>そして、<code>src/app.module.ts</code> で <code>PrismaModule</code> をインポートします。</p>
-<pre><code>// src/app.module.ts
+            <p>
+              そして、<code>src/app.module.ts</code> で
+              <code>PrismaModule</code> をインポートします。
+            </p>
+            <pre><code>// src/app.module.ts
 // ...
 import { PrismaModule } from './prisma/prisma.module';
 
@@ -381,10 +506,13 @@ import { PrismaModule } from './prisma/prisma.module';
   providers: [AppService],
 })
 export class AppModule {}</code></pre>
-                    
-                    <h3>4. UsersServiceの修正</h3>
-                    <p><code>UsersService</code> を修正し、インメモリの配列の代わりに <code>PrismaService</code> を使ってデータベースを操作するようにします。</p>
-<pre><code>// src/users/users.service.ts
+
+            <h3>4. UsersServiceの修正</h3>
+            <p>
+              <code>UsersService</code> を修正し、インメモリの配列の代わりに
+              <code>PrismaService</code> を使ってデータベースを操作するようにします。
+            </p>
+            <pre><code>// src/users/users.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -421,38 +549,69 @@ export class UsersService {
   }
 }
 </code></pre>
-                    <p><code>UsersController</code> のコードは変更不要です。再度サーバーを起動 (<code>npm run start:dev</code>) し、APIをテストしてみてください。データがデータベースに保存され、永続化されることを確認できます。</p>
-                </section>
-                
-                <section id="section-5">
-                    <h2>5. 応用: 依存性の逆転 (1時間)</h2>
-                    <p>最後に、より実践的な設計手法である「依存性の逆転の原則(DIP)」を紹介します。これにより、サービス層とデータアクセス層を分離し、テストしやすく、変更に強いアプリケーションを目指します。</p>
+            <p>
+              <code>UsersController</code> のコードは変更不要です。再度サーバーを起動 (<code
+                >npm run start:dev</code
+              >)
+              し、APIをテストしてみてください。データがデータベースに保存され、永続化されることを確認できます。
+            </p>
+          </section>
 
-                    <h3>なぜ分離するのか？</h3>
-                    <p>現在の <code>UsersService</code> は <code>PrismaService</code> に直接依存しています。これは「密結合」と呼ばれ、以下のような問題点があります。</p>
-                    <ul>
-                        <li><strong>テストの困難さ:</strong> サービス層の単体テストを行う際、データベースへの接続が必須になってしまう。</li>
-                        <li><strong>変更の影響:</strong> もしORMをPrismaから別のものに乗り換える場合、<code>UsersService</code> の大幅な修正が必要になる。</li>
-                    </ul>
-                    <p>この問題を解決するために、サービスとデータアクセスの間に「インターフェース（抽象）」を挟むリポジトリパターンを導入します。</p>
+          <section id="section-5">
+            <h2>5. 応用: 依存性の逆転 (1時間)</h2>
+            <p>
+              最後に、より実践的な設計手法である「依存性の逆転の原則(DIP)」を紹介します。これにより、サービス層とデータアクセス層を分離し、テストしやすく、変更に強いアプリケーションを目指します。
+            </p>
 
-                    <h3>1. リポジトリインターフェースの定義</h3>
-                    <p>まず、ユーザーデータの操作に関する「契約」を定義します。TypeScriptでは抽象クラスを使ってインターフェースを定義できます。<code>src/users/users.repository.interface.ts</code> を作成します。</p>
-<pre><code>// src/users/users.repository.interface.ts
+            <h3>なぜ分離するのか？</h3>
+            <p>
+              現在の <code>UsersService</code> は
+              <code>PrismaService</code>
+              に直接依存しています。これは「密結合」と呼ばれ、以下のような問題点があります。
+            </p>
+            <ul>
+              <li>
+                <strong>テストの困難さ:</strong>
+                サービス層の単体テストを行う際、データベースへの接続が必須になってしまう。
+              </li>
+              <li>
+                <strong>変更の影響:</strong> もしORMをPrismaから別のものに乗り換える場合、<code
+                  >UsersService</code
+                >
+                の大幅な修正が必要になる。
+              </li>
+            </ul>
+            <p>
+              この問題を解決するために、サービスとデータアクセスの間に「インターフェース（抽象）」を挟むリポジトリパターンを導入します。
+            </p>
+
+            <h3>1. リポジトリインターフェースの定義</h3>
+            <p>
+              まず、ユーザーデータの操作に関する「契約」を定義します。TypeScriptでは抽象クラスを使ってインターフェースを定義できます。<code
+                >src/users/users.repository.interface.ts</code
+              >
+              を作成します。
+            </p>
+            <pre><code>// src/users/users.repository.interface.ts
 import { User } from '@prisma/client';
 
 export abstract class IUsersRepository {
-  abstract findAll(): Promise<User[]>;
-  abstract findOne(id: number): Promise<User | null>;
-  abstract create(data: { name?: string; email: string }): Promise<User>;
-  abstract update(id: number, data: { name?: string; email?: string }): Promise<User>;
-  abstract remove(id: number): Promise<User>;
+  abstract findAll(): Promise&lt;User[]&gt;;
+  abstract findOne(id: number): Promise&lt;User | null&gt;;
+  abstract create(data: { name?: string; email: string }): Promise&lt;User&gt;;
+  abstract update(id: number, data: { name?: string; email?: string }): Promise&lt;User&gt;;
+  abstract remove(id: number): Promise&lt;User&gt;;
 }
 </code></pre>
 
-                    <h3>2. リポジトリの実装</h3>
-                    <p>次に、このインターフェースを実装する具体的なクラスを作成します。このクラスがPrismaを使ってデータベースと通信します。<code>src/users/users.repository.ts</code> を作成します。</p>
-<pre><code>// src/users/users.repository.ts
+            <h3>2. リポジトリの実装</h3>
+            <p>
+              次に、このインターフェースを実装する具体的なクラスを作成します。このクラスがPrismaを使ってデータベースと通信します。<code
+                >src/users/users.repository.ts</code
+              >
+              を作成します。
+            </p>
+            <pre><code>// src/users/users.repository.ts
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { IUsersRepository } from './users.repository.interface';
@@ -482,10 +641,14 @@ export class UsersRepository implements IUsersRepository {
   }
 }
 </code></pre>
-                    
-                    <h3>3. UsersServiceの修正</h3>
-                    <p><code>UsersService</code> が具体的な <code>PrismaService</code> や <code>UsersRepository</code> ではなく、抽象的な <code>IUsersRepository</code> に依存するように変更します。</p>
-<pre><code>// src/users/users.service.ts
+
+            <h3>3. UsersServiceの修正</h3>
+            <p>
+              <code>UsersService</code> が具体的な <code>PrismaService</code> や
+              <code>UsersRepository</code> ではなく、抽象的な
+              <code>IUsersRepository</code> に依存するように変更します。
+            </p>
+            <pre><code>// src/users/users.service.ts
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { IUsersRepository } from './users.repository.interface';
 
@@ -521,9 +684,13 @@ export class UsersService {
 }
 </code></pre>
 
-                    <h3>4. モジュールでの依存関係の解決</h3>
-                    <p>最後に、<code>users.module.ts</code> で、「<code>IUsersRepository</code> というトークン（インターフェース）が要求されたら、<code>UsersRepository</code> という実装クラスのインスタンスを渡す」という設定を行います。</p>
-<pre><code>// src/users/users.module.ts
+            <h3>4. モジュールでの依存関係の解決</h3>
+            <p>
+              最後に、<code>users.module.ts</code> で、「<code>IUsersRepository</code>
+              というトークン（インターフェース）が要求されたら、<code>UsersRepository</code>
+              という実装クラスのインスタンスを渡す」という設定を行います。
+            </p>
+            <pre><code>// src/users/users.module.ts
 import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
@@ -542,50 +709,58 @@ import { UsersRepository } from './users.repository';
 })
 export class UsersModule {}
 </code></pre>
-                    <p>これで、サービス層はデータアクセスの具体的な実装方法を知ることなく、定義されたインターフェースにのみ依存するようになりました。実際のプロジェクトでは、このような疎結合な設計が品質とメンテナンス性を大きく向上させます。</p>
-                    <p>以上で1日の研修は終了です。お疲れ様でした！</p>
-                </section>
-            </div>
-        </main>
+            <p>
+              これで、サービス層はデータアクセスの具体的な実装方法を知ることなく、定義されたインターフェースにのみ依存するようになりました。実際のプロジェクトでは、このような疎結合な設計が品質とメンテナンス性を大きく向上させます。
+            </p>
+            <p>以上で1日の研修は終了です。お疲れ様でした！</p>
+          </section>
+        </div>
+      </main>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('#sidebar-nav a');
+      document.addEventListener("DOMContentLoaded", () => {
+        const sections = document.querySelectorAll("section");
+        const navLinks = document.querySelectorAll("#sidebar-nav a");
 
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        navLinks.forEach(link => {
-                            link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
-                        });
-                    }
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                navLinks.forEach((link) => {
+                  link.classList.toggle(
+                    "active",
+                    link.getAttribute("href").substring(1) === entry.target.id
+                  );
                 });
-            }, { rootMargin: '-50% 0px -50% 0px' });
-
-            sections.forEach(section => {
-                observer.observe(section);
+              }
             });
+          },
+          { rootMargin: "-50% 0px -50% 0px" }
+        );
 
-            const preElements = document.querySelectorAll('pre');
-            preElements.forEach(pre => {
-                const code = pre.querySelector('code');
-                const btn = document.createElement('button');
-                btn.innerText = 'Copy';
-                btn.className = 'copy-btn';
-                btn.addEventListener('click', () => {
-                    const text = code.innerText;
-                    navigator.clipboard.writeText(text).then(() => {
-                        btn.innerText = 'Copied!';
-                        setTimeout(() => {
-                            btn.innerText = 'Copy';
-                        }, 2000);
-                    });
-                });
-                pre.appendChild(btn);
-            });
+        sections.forEach((section) => {
+          observer.observe(section);
         });
+
+        const preElements = document.querySelectorAll("pre");
+        preElements.forEach((pre) => {
+          const code = pre.querySelector("code");
+          const btn = document.createElement("button");
+          btn.innerText = "Copy";
+          btn.className = "copy-btn";
+          btn.addEventListener("click", () => {
+            const text = code.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+              btn.innerText = "Copied!";
+              setTimeout(() => {
+                btn.innerText = "Copy";
+              }, 2000);
+            });
+          });
+          pre.appendChild(btn);
+        });
+      });
     </script>
-</body>
+  </body>
 </html>
