@@ -119,18 +119,12 @@
                     <h3>環境構築</h3>
                     <p>開発に必要なツールをインストールします。Node.js (v18以上を推奨)がインストールされていることを確認してください。</p>
                     <ol>
-                        <li><strong>NestJS CLIのインストール</strong>
-<pre><code>npm install -g @nestjs/cli</code></pre>
-                        </li>
-                        <li><strong>Prisma CLIのインストール</strong>
-<pre><code>npm install -g prisma</code></pre>
-                        </li>
                         <li><strong>データベースの準備 (Docker)</strong>
                             <p>本研修ではPostgreSQLを使用します。Dockerがあれば、以下のコマンドで簡単にデータベース環境を構築できます。プロジェクトルートに <code>docker-compose.yml</code> を作成してください。</p>
 <pre><code># docker-compose.yml
 version: '3.8'
 services:
-  postgres:
+  database:
     image: postgres:15
     restart: always
     environment:
@@ -186,13 +180,13 @@ volumes:
                     <p>NestJSのCLIを使ってプロジェクトを作成し、データベースを使わないシンプルなインメモリのCRUD APIを実装します。これによりNestJSの基本的な開発フローを体験します。</p>
 
                     <h3>1. プロジェクトの新規作成</h3>
-<pre><code>nest new nestjs-prisma-project</code></pre>
+<pre><code>npx @nestjs/cli new nestjs-prisma-project</code></pre>
                     <p>プロンプトが表示されたら、パッケージマネージャを選択してください (例: npm)。</p>
 
                     <h3>2. ユーザー管理機能のモジュール作成</h3>
                     <p>NestJS CLIを使って、`users` という機能に必要なファイルを一括で生成します。</p>
 <pre><code>cd nestjs-prisma-project
-nest g resource users</code></pre>
+npx @nestjs/cli g resource users</code></pre>
                     <p>プロンプトで `REST API` を選択し、`Would you like to generate CRUD entry points?` に `y` (Yes)と答えてください。これにより、`users`モジュール、コントローラ、サービス、DTOの雛形が作成されます。今回はDTOを使用しないため、生成された`dto`フォルダと関連するコードは後ほど手動で削除します。</p>
 
                     <h3>3. インメモリでのCRUD実装</h3>
@@ -305,6 +299,10 @@ export class UsersController {
                     <p>これにより、<code>prisma</code> フォルダと <code>.env</code> ファイルが生成されます。<code>.env</code> ファイルを編集し、Dockerで設定したデータベースへの接続情報を記述します。</p>
 <pre><code># .env
 DATABASE_URL="postgresql://user:password@localhost:5432/nestjs-prisma-training?schema=public"</code></pre>
+                    <blockquote class="border-l-4 border-yellow-400 bg-yellow-50 p-4 my-4">
+                        <p class="font-bold text-yellow-800">注意</p>
+                        <p class="text-yellow-700"><code>P1000: Authentication failed</code> というエラーが出た場合、多くはここのユーザー名・パスワードが<code>docker-compose.yml</code>の内容と一致していないことが原因です。タイプミスがないか確認してください。</p>
+                    </blockquote>
 
                     <h3>2. スキーマ定義</h3>
                     <p><code>prisma/schema.prisma</code> を開き、Userモデルを定義します。</p>
